@@ -1,11 +1,9 @@
 #include "LedPatternConfetti.hpp"
 
 LedPatternConfetti::LedPatternConfetti(led_strip_list strips)
-: LedPattern(strips)
+: LedPattern(strips, "Confetti")
 {
 }
-
-const char * LedPatternConfetti::GetName() { return "Confetti"; }
 
 /// @brief Function to be called to set the pixels
 void LedPatternConfetti::DrawFrame()

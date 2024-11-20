@@ -3,6 +3,7 @@
 #include "FastLED.h"
 #include "led-strip.h"
 #include <list>
+#include <string>
 
 typedef CRGB (*GetCurrentColorFunc)();
 typedef uint8_t (*GetCurrentHueFunc)();
@@ -15,8 +16,9 @@ class LedPattern
 {
   protected:
   led_strip_list _led_strips;
+  std::string _name;
   LedPattern() {}
-  LedPattern(led_strip_list strips);
+  LedPattern(led_strip_list strips, std::string name = "SAMPLE");
   void SetStrips(led_strip_list strips);
 
   static CRGB GetCurrentColor();
@@ -34,7 +36,7 @@ class LedPattern
   static IncrementColorFunc IncrementColorHandler;
 
   /// @brief Get the pattern name
-  virtual const char * GetName();
+  virtual std::string GetName();
 
   /// @brief Get the constant speed for this pattern (0 for variable speed)
   virtual uint8_t GetConstSpeed();

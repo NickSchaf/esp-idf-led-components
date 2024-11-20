@@ -14,7 +14,6 @@ class LedPatternStrobe : public LedPattern
   virtual ~LedPatternStrobe() {}
 
   LedPatternStrobe(led_strip_list strips);
-  virtual const char * GetName() override;
 
   /// @brief Function to be called to set the pixels
   virtual void DrawFrame() override;

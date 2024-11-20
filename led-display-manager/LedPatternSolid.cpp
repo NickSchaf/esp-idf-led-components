@@ -1,16 +1,9 @@
 #include "LedPatternSolid.hpp"
 
-LedPatternSolid::LedPatternSolid(led_strip_list strips, uint16_t colorIncrementTimeMs, const char * nameOverride)
-: LedPattern(strips)
+LedPatternSolid::LedPatternSolid(led_strip_list strips, uint16_t colorIncrementTimeMs, std::string nameOverride)
+: LedPattern(strips, nameOverride)
 {
   _colorIncrTimeMs = colorIncrementTimeMs;
-  _name = nameOverride;
-}
-
-const char * LedPatternSolid::GetName()
-{
-  if (_name != nullptr) return _name;
-  else return "Solid";
 }
 
 /// @brief Function to be called to set the pixels

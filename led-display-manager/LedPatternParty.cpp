@@ -1,11 +1,9 @@
 #include "LedPatternParty.hpp"
 
 LedPatternParty::LedPatternParty(led_strip_list strips)
-: LedPattern(strips), _paletteStartIdx(0)
+: LedPattern(strips, "Party"), _paletteStartIdx(0)
 {
 }
-
-const char * LedPatternParty::GetName() { return "Party"; }
 
 /// @brief Function to be called to set the pixels
 void LedPatternParty::DrawFrame()

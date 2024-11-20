@@ -19,7 +19,6 @@ class LedPatternFire : public LedPattern
   virtual ~LedPatternFire() {}
 
   LedPatternFire(led_strip_list stripsHoriz, led_strip_list stripsVertical);
-  virtual const char * GetName() override;
 
   void PatternStart() override;
   void PatternStop() override;

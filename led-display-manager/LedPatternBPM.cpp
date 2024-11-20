@@ -1,11 +1,9 @@
 #include "LedPatternBPM.hpp"
 
 LedPatternBPM::LedPatternBPM(led_strip_list strips)
-: LedPattern(strips)
+: LedPattern(strips, "BPM")
 {
 }
-
-const char * LedPatternBPM::GetName() { return "BPM"; }
 
 /// @brief Function to be called to set the pixels
 void LedPatternBPM::DrawFrame()

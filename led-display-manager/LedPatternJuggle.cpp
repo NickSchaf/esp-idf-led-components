@@ -1,11 +1,9 @@
 #include "LedPatternJuggle.hpp"
 
 LedPatternJuggle::LedPatternJuggle(led_strip_list strips)
-: LedPattern(strips)
+: LedPattern(strips, "Juggle")
 {
 }
-
-const char * LedPatternJuggle::GetName() { return "Juggle"; }
 
 /// @brief Function to be called to set the pixels
 void LedPatternJuggle::DrawFrame()

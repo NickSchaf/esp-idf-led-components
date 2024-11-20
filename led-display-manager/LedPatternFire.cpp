@@ -1,11 +1,9 @@
 #include "LedPatternFire.hpp"
 
 LedPatternFire::LedPatternFire(led_strip_list stripsHoriz, led_strip_list stripsVertical)
-: LedPattern(stripsHoriz), _led_strips_vertical(stripsVertical)
+: LedPattern(stripsHoriz, "Fire"), _led_strips_vertical(stripsVertical)
 {
 }
-
-const char * LedPatternFire::GetName() { return "Fire"; }
 
 uint8_t LedPatternFire::GetConstSpeed() { return 90; };
 

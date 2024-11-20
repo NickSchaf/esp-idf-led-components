@@ -1,11 +1,9 @@
 #include "LedPatternPride.hpp"
 
 LedPatternPride::LedPatternPride(led_strip_list strips)
-: LedPattern(strips), _pseudotime(0), _lastMillis(0), _hue16(0)
+: LedPattern(strips, "Pride"), _pseudotime(0), _lastMillis(0), _hue16(0)
 {
 }
-
-const char * LedPatternPride::GetName() { return "Pride"; }
 
 /// @brief Function to be called to set the pixels
 void LedPatternPride::DrawFrame()

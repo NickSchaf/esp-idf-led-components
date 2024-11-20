@@ -1,11 +1,9 @@
 #include "LedPatternStrobe.hpp"
 
 LedPatternStrobe::LedPatternStrobe(led_strip_list strips)
-: LedPattern(strips), _lastState(false)
+: LedPattern(strips, "Strobe"), _lastState(false)
 {
 }
-
-const char * LedPatternStrobe::GetName() { return "Strobe"; }
 
 /// @brief Function to be called to set the pixels
 void LedPatternStrobe::DrawFrame()

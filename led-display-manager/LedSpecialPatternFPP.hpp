@@ -19,7 +19,6 @@ class LedSpecialPatternFPP : public LedPattern
   virtual ~LedSpecialPatternFPP() {}
 
   LedSpecialPatternFPP(led_strip_t * strip);
-  virtual const char * GetName() override;
 
   void PatternStart() override;
   void PatternStop() override;

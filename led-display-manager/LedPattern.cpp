@@ -6,14 +6,14 @@ CRGB LedPattern::GetCurrentColor() { return (GetCurrentColorHandler != NULL) ? G
 uint8_t LedPattern::GetCurrentHue() { return (GetCurrentHueHandler != NULL) ? GetCurrentHueHandler() : 0; }
 void LedPattern::IncrementColor() { if (IncrementColorHandler != NULL)  IncrementColorHandler(); }
 
-const char * LedPattern::GetName() { return "UNKNOWN"; }
+std::string LedPattern::GetName() { return _name; }
 
 GetCurrentColorFunc LedPattern::GetCurrentColorHandler = NULL;
 GetCurrentHueFunc LedPattern::GetCurrentHueHandler = NULL;
 IncrementColorFunc LedPattern::IncrementColorHandler = NULL;
 
-LedPattern::LedPattern(led_strip_list strips)
-  : _led_strips(strips)
+LedPattern::LedPattern(led_strip_list strips, std::string name)
+  : _led_strips(strips), _name(name)
   { }
 
 /// @brief Get the constant speed for this pattern (0 for variable speed)

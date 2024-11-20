@@ -18,7 +18,6 @@ class LedPatternMarquee : public LedPattern
   virtual ~LedPatternMarquee() {}
 
   LedPatternMarquee(led_strip_list strips, uint8_t barSize = 4, uint8_t gapSize = 3);
-  virtual const char * GetName() override;
 
   void PatternStart() override;
 

@@ -21,7 +21,6 @@ class LedPatternKnightRider : public LedPattern
   virtual ~LedPatternKnightRider() {}
 
   LedPatternKnightRider(led_strip_list strips);
-  virtual const char * GetName() override;
 
   /// @brief Get the constant speed for this pattern (0 for variable speed)
   virtual uint8_t GetConstSpeed() override;

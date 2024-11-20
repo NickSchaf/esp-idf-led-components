@@ -18,7 +18,6 @@ class LedPatternPolice : public LedPattern
   virtual ~LedPatternPolice() {}
 
   LedPatternPolice(led_strip_list strips_red_A, led_strip_list strips_red_B, led_strip_list strips_blue_A, led_strip_list strips_blue_B);
-  virtual const char * GetName() override;
 
   virtual uint8_t GetConstSpeed() override;
 

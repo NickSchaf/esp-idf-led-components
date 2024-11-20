@@ -2,7 +2,7 @@
 #include <algorithm>
 
 LedSpecialPatternFPP::LedSpecialPatternFPP(led_strip_t * strip)
-: LedPattern({strip}), _isActive(false)
+: LedPattern({strip}, "[Falcon Player]"), _isActive(false)
 {
   _eventGroup = xEventGroupCreate();
   if (_eventGroup == NULL)
@@ -10,8 +10,6 @@ LedSpecialPatternFPP::LedSpecialPatternFPP(led_strip_t * strip)
     ESP_LOGE(__func__, "LedSpecialPatternFPP: Failed to create event group.");
   }
 }
-
-const char * LedSpecialPatternFPP::GetName() { return "[Falcon Player]"; }
 
 void LedSpecialPatternFPP::PatternStart()
 {

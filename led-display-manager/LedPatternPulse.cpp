@@ -1,21 +1,20 @@
 #include "LedPatternPulse.hpp"
+#include <algorithm>
 
-LedPatternPulse::LedPatternPulse(led_strip_list strips)
-: LedPattern(strips)
+LedPatternPulse::LedPatternPulse(led_strip_list strips, uint8_t brightnessStep, uint8_t minBrightness, uint8_t maxBrightness)
+: LedPattern(strips, "Pulse")
 {
+  _step = std::min(std::max(brightnessStep, (uint8_t)1), (uint8_t)255);
+  _min = minBrightness;
+  _max = maxBrightness;
 }
-
-const char * LedPatternPulse::GetName() { return "Pulse"; }
 
 void LedPatternPulse::PatternStart()
 {
   // On the first time through the loop after chaning patterns, we need to set the direction
   _increasing = false;
-  _scaleVal = 255;
+  _scaleVal = _max;
 }
-
-#define PULSE_STEP_SIZE 15
-#define PULSE_MIN_SCALE 10
 
 /// @brief Function to be called to set the pixels
 void LedPatternPulse::DrawFrame()
@@ -34,16 +33,18 @@ void LedPatternPulse::DrawFrame()
 
   if (_increasing)
   {
-    _scaleVal += PULSE_STEP_SIZE;
-    if (255 - _scaleVal < PULSE_STEP_SIZE) _increasing = false;  // Reverse the scaling direction for next iteration
+    _scaleVal = (uint8_t)(std::min((int)_scaleVal + (int)_step, (int)_max));  // Casts to avoid rolling-over
+
+    if (_max == _scaleVal) _increasing = false;  // Reverse the scaling direction for next iteration
   }
   else
   {
-    _scaleVal -= PULSE_STEP_SIZE;
-    if (PULSE_MIN_SCALE + PULSE_STEP_SIZE > _scaleVal)
+    _scaleVal = (uint8_t)(std::max((int)_scaleVal - (int)_step, (int)_min));  // Casts to avoid rolling-over
+
+    if (_min == _scaleVal)
     {
       _increasing = true;  // Reverse the scaling direction for next iteration
-      IncrementColor();
+      IncrementColor();    // Use next color on the next pulse
     }
   }
 }

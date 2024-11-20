@@ -1,11 +1,9 @@
 #include "LedPatternPolice.hpp"
 
 LedPatternPolice::LedPatternPolice(led_strip_list strips_red_A, led_strip_list strips_red_B, led_strip_list strips_blue_A, led_strip_list strips_blue_B)
-: LedPattern(strips_red_A), _strips_red_B(strips_red_B), _strips_blue_A(strips_blue_A), _strips_blue_B(strips_blue_B), _counter(0), _toggle(false)
+: LedPattern(strips_red_A, "Police"), _strips_red_B(strips_red_B), _strips_blue_A(strips_blue_A), _strips_blue_B(strips_blue_B), _counter(0), _toggle(false)
 {
 }
-
-const char * LedPatternPolice::GetName() { return "Police"; }
 
 uint8_t LedPatternPolice::GetConstSpeed() { return 70; };
 

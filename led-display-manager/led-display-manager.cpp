@@ -37,7 +37,7 @@ LedSpecialPatternFPP * fppPattern = nullptr;
 PatternColor_Rainbow internal_rainbowColor;
 PatternColor_Rainbow * rainbowColor = &internal_rainbowColor;
 
-BoundedValue bounded_speed(1, 100, 2, DEFAULT_FRAMES_PER_SECOND);
+BoundedValue bounded_speed(1, 150, 2, DEFAULT_FRAMES_PER_SECOND);
 BoundedValue bounded_brightness(10, 250, 10, DEFAULT_BRIGHTNESS);
 
 
@@ -59,6 +59,8 @@ ValueChangedCb _speedChangedCb;
 std::vector<PatternColor*> _colors;
 std::vector<LedPattern*> _patterns;
 led_strip_list _allLedStrips;
+std::string _patternListStr;
+std::string _colorListStr;
 
 void LedDisplayManager::AddPattern(LedPattern* pattern)
 {
@@ -66,10 +68,14 @@ void LedDisplayManager::AddPattern(LedPattern* pattern)
   {
     _patterns.push_back(pattern);
 
+    printf("Pattern added (%p) %s\n", pattern, pattern->GetName().c_str());
+    _patternListStr.append(pattern->GetName());
+    _patternListStr.append("\n");
+
     // If the caller specifies an FPP pattern, we need to make note of it because there is special handling for it
     LedSpecialPatternFPP test({nullptr});
     // All instances of LedSpecialPatternFPP return the same static string for the name
-    if (test.GetName() != pattern->GetName())
+    if (test.GetName() == pattern->GetName())
     {
       fppPattern = (LedSpecialPatternFPP*)pattern;
     }
@@ -81,6 +87,8 @@ void LedDisplayManager::AddColor(PatternColor* color)
   if (color != nullptr)
   {
     _colors.push_back(color);
+    _colorListStr.append(color->GetName());
+    _colorListStr.append("\n");
 
     // All instances of PatternColor_Rainbow return the same static string for the name
     if (internal_rainbowColor.GetName() == color->GetName())
@@ -234,11 +242,11 @@ void LedDisplayManager::ledTask(void *pvParameters)
     // Call the current pattern function once, updating the 'strip_A.pixels' array
     if (gCurPattern != NULL) gCurPattern->DrawFrame();
 
-    if (gCurPattern != fppPattern && fppPattern != nullptr)
+    if (gCurPattern != fppPattern)
     {
       FastLED.setBrightness(bounded_brightness.Value());
       FastLED.show();
-      FastLED.delay(101 - ( (gCurPattern->GetConstSpeed() == 0) ? bounded_speed.Value() : gCurPattern->GetConstSpeed() ));
+      FastLED.delay(1 + bounded_speed.Max() - ( (gCurPattern->GetConstSpeed() == 0) ? bounded_speed.Value() : gCurPattern->GetConstSpeed() ));
 
       // Call the loop function on all colors so they can incrmenet themselves if desired
       std::for_each(_colors.begin(), _colors.end(), [](PatternColor* color) { color->Loop(); });
@@ -284,63 +292,20 @@ void LedDisplayManager::Start()
   }
 
   LoadSavedSettings();
+  _patternListStr.pop_back(); // Remove last char, which is an extra newline
+  _colorListStr.pop_back();   // Remove last char, which is an extra newline
 
   xTaskCreatePinnedToCore(&ledTask, "ledController", 4000, nullptr, 6, nullptr, 1);
 }
 
-void LedDisplayManager::GetColors(char * colorNames, int32_t * bufSize)
+std::string LedDisplayManager::GetColors()
 {
-    int32_t accumulatedSz = 0;
-    int32_t maxSz = 0;
-    if (bufSize != NULL) maxSz = *bufSize;
-
-    PatternColorConstIter curColor = _colors.begin();
-    PatternColorConstIter endColor = _colors.end();
-
-    while (curColor != endColor)
-    {
-        const char* name = (*curColor)->GetName();
-        int32_t len = strlen(name);
-        if (colorNames != NULL && (accumulatedSz + 1 + len) < maxSz)
-        {
-            strcpy(colorNames + accumulatedSz, name);
-            colorNames[accumulatedSz + len] = '\n';
-        }
-        accumulatedSz += len + 1;
-        curColor++;
-    }
-
-    // Replace last newline with null terminator to denote the end of the list
-    if (accumulatedSz > 0 && colorNames != NULL) colorNames[accumulatedSz - 1] = 0;
-
-    if (bufSize != NULL) *bufSize = accumulatedSz;
+  return _colorListStr;
 }
 
-void LedDisplayManager::GetPatterns(char * patternNames, int32_t * bufSize)
+std::string LedDisplayManager::GetPatterns()
 {
-    int32_t accumulatedSz = 0;
-    int32_t maxSz = 0;
-    if (bufSize != NULL) maxSz = *bufSize;
-
-    LedPattern * curPattern = _patterns[0];
-    LedPattern * endPattern = curPattern + _patterns.size();
-
-    while (curPattern != endPattern)
-    {
-        int32_t len = strlen(curPattern->GetName());
-        if (patternNames != NULL && (accumulatedSz + 1 + len) < maxSz)
-        {
-            strcpy(patternNames + accumulatedSz, curPattern->GetName());
-            patternNames[accumulatedSz + len] = '\n';
-        }
-        accumulatedSz += len + 1;
-        curPattern++;
-    }
-
-    // Replace last newline with null terminator to denote the end of the list
-    if (accumulatedSz > 0 && patternNames != NULL) patternNames[accumulatedSz - 1] = 0;
-
-    if (bufSize != NULL) *bufSize = accumulatedSz;
+  return _patternListStr;
 }
 
 uint8_t LedDisplayManager::GetPatternIndex()
@@ -397,12 +362,16 @@ void SetSpeedChangedCallback(ValueChangedCb fn)
 
 void GetColors(char * colorNames, int32_t * bufSize)
 {
-  LedDisplayManager::GetColors(colorNames, bufSize);
+  std::string temp = LedDisplayManager::GetColors();
+  strncpy(colorNames, temp.c_str(), *bufSize);
+  *bufSize = std::min(*bufSize, (int32_t)(temp.size() + 1));
 }
 
 void GetPatterns(char * patternNames, int32_t * bufSize)
 {
-  LedDisplayManager::GetPatterns(patternNames, bufSize);
+  std::string temp = LedDisplayManager::GetPatterns();
+  strncpy(patternNames, temp.c_str(), *bufSize);
+  *bufSize = std::min(*bufSize, (int32_t)(temp.size() + 1));
 }
 
 
@@ -425,7 +394,7 @@ void LedDisplayManager::SetPattern(uint8_t patternIndex)
   {
     nextPatternIndex = patternIndex;
     gPatternSaveState.SetChanged();
-    ESP_LOGI(__func__, "Pattern set to %s", _patterns[nextPatternIndex]->GetName());
+    ESP_LOGI(__func__, "Pattern set to %s", _patterns[nextPatternIndex]->GetName().c_str());
     if (_patternChangedCb != NULL) _patternChangedCb(nextPatternIndex);
   }
 }
@@ -487,7 +456,7 @@ static int pattern_cmd_func(int argc, char **argv)
       int8_t idx = 0;
       for (; idx < _patterns.size(); idx++)
       {
-        printf("  %c %d - %s\r\n", (nextPatternIndex == idx) ? '*' : ' ', idx, _patterns[idx]->GetName());
+        printf("  %c %d - %s\r\n", (nextPatternIndex == idx) ? '*' : ' ', idx, _patterns[idx]->GetName().c_str());
       }
     }
     else

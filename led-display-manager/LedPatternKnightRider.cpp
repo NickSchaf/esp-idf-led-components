@@ -1,11 +1,9 @@
 #include "LedPatternKnightRider.hpp"
 
 LedPatternKnightRider::LedPatternKnightRider(led_strip_list strips)
-: LedPattern(strips), _movementDataList(strips.size(), { .Position = 0, .Increment = 1})
+: LedPattern(strips, "Knight Rider"), _movementDataList(strips.size(), { .Position = 0, .Increment = 1})
 {
 }
-
-const char * LedPatternKnightRider::GetName() { return "Knight Rider"; }
 
 uint8_t LedPatternKnightRider::GetConstSpeed() { return 100; };
 

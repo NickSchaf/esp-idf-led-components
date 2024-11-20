@@ -13,7 +13,6 @@ class LedPatternBPM : public LedPattern
   virtual ~LedPatternBPM() {}
 
   LedPatternBPM(led_strip_list strips);
-  virtual const char * GetName() override;
 
   /// @brief Function to be called to set the pixels
   virtual void DrawFrame() override;

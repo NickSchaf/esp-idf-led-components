@@ -22,8 +22,8 @@ class LedDisplayManager
 	static void AddLedStrip(led_strip_t * strip);
 	// Could also add functions to remove items or clear the vectors, will do that when they're needed
 
-	static void GetColors(char * colorNames, int32_t * bufSize);
-	static void GetPatterns(char * patternNames, int32_t * bufSize);
+	static std::string GetColors();
+	static std::string GetPatterns();
 
 	static uint8_t GetPatternIndex();
 	static uint8_t GetColorIndex();

@@ -19,7 +19,6 @@ class LedPatternFadingMarquee : public LedPattern
   virtual ~LedPatternFadingMarquee() {}
 
   LedPatternFadingMarquee(led_strip_list stripsForward, led_strip_list stripsReverse, uint8_t barSize = 4, uint8_t gapSize = 3);
-  virtual const char * GetName() override;
 
   void PatternStart() override;
 

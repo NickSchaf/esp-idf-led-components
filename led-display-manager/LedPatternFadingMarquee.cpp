@@ -1,11 +1,9 @@
 #include "LedPatternFadingMarquee.hpp"
 
 LedPatternFadingMarquee::LedPatternFadingMarquee(led_strip_list stripsForward, led_strip_list stripsReverse, uint8_t barSize, uint8_t gapSize)
-: LedPattern(stripsForward), _led_strips_reverse(stripsReverse), _barSize(barSize), _gapSize(gapSize)
+: LedPattern(stripsForward, "Fading Marquee"), _led_strips_reverse(stripsReverse), _barSize(barSize), _gapSize(gapSize)
 {
 }
-
-const char * LedPatternFadingMarquee::GetName() { return "Fading Marquee"; }
 
 void LedPatternFadingMarquee::PatternStart()
 {

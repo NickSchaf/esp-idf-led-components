@@ -1,11 +1,9 @@
 #include "LedPatternRainbowStripe.hpp"
 
 LedPatternRainbowStripe::LedPatternRainbowStripe(led_strip_list strips)
-: LedPattern(strips), _paletteStartIdx(0)
+: LedPattern(strips, "Rainbow Stripe"), _paletteStartIdx(0)
 {
 }
-
-const char * LedPatternRainbowStripe::GetName() { return "Rainbow Stripe"; }
 
 /// @brief Function to be called to set the pixels
 void LedPatternRainbowStripe::DrawFrame()

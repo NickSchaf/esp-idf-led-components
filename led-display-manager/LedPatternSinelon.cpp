@@ -1,11 +1,9 @@
 #include "LedPatternSinelon.hpp"
 
 LedPatternSinelon::LedPatternSinelon(led_strip_list strips)
-: LedPattern(strips)
+: LedPattern(strips, "Sinelon")
 {
 }
-
-const char * LedPatternSinelon::GetName() { return "Sinelon"; }
 
 /// @brief Function to be called to set the pixels
 void LedPatternSinelon::DrawFrame()

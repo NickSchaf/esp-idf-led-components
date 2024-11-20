@@ -1,11 +1,9 @@
 #include "LedPatternMarquee.hpp"
 
 LedPatternMarquee::LedPatternMarquee(led_strip_list strips, uint8_t barSize, uint8_t gapSize)
-: LedPattern(strips), _barSize(barSize), _gapSize(gapSize)
+: LedPattern(strips, "Marquee"), _barSize(barSize), _gapSize(gapSize)
 {
 }
-
-const char * LedPatternMarquee::GetName() { return "Marquee"; }
 
 void LedPatternMarquee::PatternStart()
 {
